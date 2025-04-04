@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI World Portal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
+      color: #fff;
+      padding: 2rem;
+      overflow-x: hidden;
+      animation: bgshift 20s infinite alternate ease-in-out;
+    }
+    @keyframes bgshift {
+      0% { background-position: 0 0; }
+      100% { background-position: 100% 100%; }
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #111;
+      padding: 1rem;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 0 15px #ff3399;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+    nav a:hover {
+      color: #ff3399;
+      text-shadow: 0 0 5px #ff3399;
+    }
+    section {
+      padding: 6rem 2rem 3rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .box {
+      background: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,0,255,0.2);
+      margin-top: 2rem;
+      animation: pulse 4s infinite alternate;
+    }
+    @keyframes pulse {
+      from { box-shadow: 0 0 15px rgba(255,0,255,0.1); }
+      to { box-shadow: 0 0 30px rgba(255,0,255,0.4); }
+    }
+    textarea, input, select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 1rem;
+      color: #fff;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.8rem 2rem;
+      border: none;
+      background: #ff007f;
+      color: white;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+    button:hover {
+      background: #ff3399;
+      transform: scale(1.05);
+    }
+    .response {
+      margin-top: 2rem;
+      font-size: 1.4rem;
+      text-align: center;
+      min-height: 60px;
+    }
+    .premium a, .share-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background: gold;
+      color: #000;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 0 15px gold;
+    }
+    .feed-item {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #222;
+      border-radius: 10px;
+      animation: fadein 1s ease-in;
+    }
+    .typing {
+      border-right: .1em solid #fff;
+      animation: blink .75s step-end infinite;
+    }
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: white; }
+    }
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 2rem;
+      z-index: 9999;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">Loading Portal...</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#wheel">Spin</a>
+    <a href="#feed">Feed</a>
+    <a href="#unlock">Secrets</a>
+    <a href="#chat">AI</a>
+    <a href="#premium">Premium</a>
+  </nav>  <section id="home">
+    <h1>AI World Portal</h1>
+    <div class="box">
+      <p>Discover your destiny. Type any question below:</p>
+      <textarea id="userInput"></textarea>
+      <button onclick="revealAnswer()">Reveal</button>
+      <div class="response" id="responseBox">Awaiting divine signal...</div>
+    </div>
+  </section>  <section id="wheel">
+    <h2>Daily Spin</h2>
+    <div class="box">
+      <button onclick="spinWheel()">Spin</button>
+      <div class="response" id="wheelResult"></div>
+    </div>
+  </section>  <section id="feed">
+    <h2>Psychic Feed</h2>
+    <div class="box" id="feed"></div>
+  </section>  <section id="unlock">
+    <h2>Unlock Secrets</h2>
+    <div class="box">
+      <button onclick="revealSecret()">Reveal Next</button>
+      <div class="response" id="secretBox"></div>
+    </div>
+  </section>  <section id="chat">
+    <h2>AI Oracle</h2>
+    <div class="box">
+      <input type="text" id="chatInput" placeholder="Your thoughts...">
+      <button onclick="sendMessage()">Send</button>
+      <div class="response" id="chatResponse"></div>
+    </div>
+  </section>  <section id="premium">
+    <h2>Go Premium</h2>
+    <div class="box premium">
+      <p>Unlock deeper secrets + future vision.</p>
+      <a href="https://pay.google.com/gp/p/ui/pay?pa=keanjohn72@oksbi" target="_blank">Pay via GPay</a>
+      <p>Love the portal? Share it:</p>
+      <button class="share-btn" onclick="copyLink()">Copy Link</button>
+      <div id="shareStatus"></div>
+    </div>
+  </section>  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mp3">
+  </audio>  <script>
+    const answers = ["The stars align in your favor.", "A shadow follows you.", "You are on the edge of greatness."];
+    const feedPhrases = ["Mystic codes swirling...", "AI whispering...", "Decrypting fate..."];
+    const secrets = ["Secret 1: Your choices echo.", "Secret 2: Reality can bend.", "Secret 3: Fear hides truth."];
+
+    function revealAnswer() {
+      const input = document.getElementById("userInput").value;
+      const idx = Math.floor(Math.random() * answers.length);
+      document.getElementById("responseBox").innerHTML = `<span class='typing'>${answers[idx]}</span>`;
+    }
+
+    function spinWheel() {
+      const options = ["Love Boost", "Wealth Energy", "Clarity Vision", "Surprise Luck"];
+      const pick = options[Math.floor(Math.random() * options.length)];
+      document.getElementById("wheelResult").innerText = "Wheel says: " + pick;
+      vibrate();
+    }
+
+    function revealSecret() {
+      const el = document.getElementById("secretBox");
+      let idx = Math.floor(Math.random() * secrets.length);
+      el.innerHTML = `<span class='typing'>${secrets[idx]}</span>`;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("chatInput").value;
+      let reply = "I sense hesitation...";
+      if (input.includes("love")) reply = "Love spirals within your path.";
+      else if (input.includes("money")) reply = "Money follows clarity.";
+      else if (input.includes("truth")) reply = "Truth is hidden in repetition.";
+      document.getElementById("chatResponse").innerText = reply;
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText("Visit the AI Portal: https://your-site.github.io").then(() => {
+        document.getElementById("shareStatus").innerText = "Link copied! Share to unlock secrets.";
+      });
+    }
+
+    function vibrate() {
+      if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+    }
+
+    function loadFeed() {
+      const feed = document.getElementById("feed");
+      for (let i = 0; i < 10; i++) {
+        const div = document.createElement("div");
+        div.className = "feed-item";
+        div.innerText = feedPhrases[Math.floor(Math.random() * feedPhrases.length)];
+        feed.appendChild(div);
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        loadFeed();
+      }
+    });
+
+    window.onload = () => {
+      setTimeout(() => document.getElementById("loader").classList.add("hidden"), 2000);
+      loadFeed();
+    };
+  </script></body>
+</html>
