@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Federal Bureau Intelligence Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Courier New", Courier, monospace;
+      background: #f8f8f8;
+      color: #000;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px double black;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .seal {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      width: 80px;
+      opacity: 0.1;
+    }
+    h1 {
+      font-size: 1.8em;
+      text-transform: uppercase;
+    }
+    label, input, select {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      font-size: 1em;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-family: "Courier New", Courier, monospace;
+    }
+    button {
+      background: black;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+    }
+    .doc-box {
+      background: white;
+      padding: 30px;
+      border: 2px solid black;
+      position: relative;
+      margin-top: 30px;
+      box-shadow: 0 0 10px #00000022;
+    }
+    .classified-watermark {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 4em;
+      color: red;
+      opacity: 0.03;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .meta-line {
+      margin: 5px 0;
+      font-size: 0.95em;
+    }
+    .content-block {
+      margin-top: 20px;
+      line-height: 1.5em;
+      white-space: pre-wrap;
+    }
+    .disclaimer {
+      margin-top: 30px;
+      font-size: 0.6em;
+      text-align: center;
+      color: #f8f8f8;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/US-FBI-ShadedSeal.svg/200px-US-FBI-ShadedSeal.svg.png" class="seal" />
+      <h1>FEDERAL BUREAU OF INVESTIGATION</h1>
+      <div>INTERNAL MEMORANDUM - EYES ONLY</div>
+    </div>
+
+    <label for="template">Document Template</label>
+    <select id="template">
+      <option>FBI Intelligence Brief</option>
+      <option>National Security Memo</option>
+    </select>
+
+    <label for="title">Subject Line</label>
+    <input type="text" id="title" placeholder="e.g. Analysis: AI Harvesting Cognitive Signals" />
+
+    <label for="realism">Redaction Level</label>
+    <input type="range" id="realism" min="0" max="100" />
+
+    <button onclick="generate()">Generate Confidential Document</button>
+
+    <div id="document" class="doc-box" style="display:none;">
+      <div class="classified-watermark">CLASSIFIED</div>
+      <div class="meta-line"><strong>Date:</strong> <span id="doc-date"></span></div>
+      <div class="meta-line"><strong>Case ID:</strong> #<span id="case-id"></span></div>
+      <div class="meta-line"><strong>To:</strong> Internal Review, Office of Strategic Oversight</div>
+      <div class="meta-line"><strong>From:</strong> Special Operations Intel Division</div>
+      <div class="meta-line"><strong>Subject:</strong> <span id="doc-subject"></span></div>
+      <div class="content-block" id="doc-content"></div>
+    </div>
+
+    <div class="disclaimer">
+      Fictional content. Not affiliated with any agency.
+    </div>
+  </div>
+
+  <script>
+    function generate() {
+      const subjects = [
+        "Operation Frog Signal Interference Analysis",
+        "Cognitive Surveillance Trends in Gen Z Online Behavior",
+        "Memetic Signal Mapping: Phase 3 Findings",
+        "Experimental AI Anomalies from Nonlinear Algorithms",
+        "Observed Viral Convergence from SubNet Activity"
+      ];
+
+      const contentSamples = [
+        "— Acoustic resonance patterns in popular audio tracks align with behavioral shift zones.\n— A subset of neural network clusters have shown independent meme evolution.\n— Ongoing observation required. Phase 4 under development.",
+        "— Cross-agency analysis reveals embedded frequencies in short-form videos.\n— Correlation between peak view hours and subject receptivity confirmed.\n— Recommend temporary algorithmic suppression under Directive 88-B.",
+        "— Memetic payloads tested on public platforms produced expected cognitive fragmentation.\n— Subject response suggests high compliance to visual-symbol injection.\n— Immediate containment protocol advised.",
+        "— Analysis of AI-generated content flagged multiple anomalies exceeding chaos index threshold.\n— Covert netwatch engaged. Pending manual override clearance.",
+        "— Investigation reveals SubNet convergence aligned with lunar cycles.\n— Multiple unverified sources indicate layered protocol leaks."
+      ];
+
+      const title = document.getElementById("title").value || "Untitled";
+      const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+      const randomContent = contentSamples[Math.floor(Math.random() * contentSamples.length)];
+
+      document.getElementById("doc-subject").innerText = title + " — " + randomSubject;
+      document.getElementById("doc-content").innerText = randomContent;
+      document.getElementById("doc-date").innerText = new Date().toLocaleDateString();
+      document.getElementById("case-id").innerText = Math.floor(Math.random() * 900000 + 100000);
+
+      const realism = parseInt(document.getElementById("realism").value);
+      document.querySelector(".classified-watermark").style.opacity = realism > 70 ? "0.01" : "0.03";
+
+      document.getElementById("document").style.display = "block";
+    }
+  </script>
+</body>
+</html>
