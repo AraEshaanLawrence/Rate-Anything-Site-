@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulOS | The Ultimate Spiritual Operating System</title>
+    <style>
+        :root {
+            --primary: #6e44ff;
+            --secondary: #00e5ff;
+            --dark: #0f0721;
+            --light: #f0e9ff;
+            --glow: 0 0 15px rgba(110, 68, 255, 0.7);
+            --premium: linear-gradient(45deg, #ff9a00, #ff00aa);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 1s ease;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--glow);
+        }
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(110, 68, 255, 0.5);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 68, 255, 0.7);
+        }
+        .premium-button {
+            background: var(--premium);
+            box-shadow: 0 5px 20px rgba(255, 0, 170, 0.5);
+        }
+        .premium-button:hover {
+            box-shadow: 0 8px 25px rgba(255, 0, 170, 0.7);
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(110, 68, 255, 0.3);
+            cursor: pointer;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            background: rgba(110, 68, 255, 0.1);
+        }
+        .tool-card h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--dark);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid var(--primary);
+            box-shadow: var(--glow);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            outline: none;
+        }
+        .search-bar:focus {
+            box-shadow: var(--glow);
+        }
+        .vibration-box {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, #1a0033, #4b0082);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .vibration-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            animation: vibrate 2s infinite alternate;
+        }
+        @keyframes vibrate {
+            0% { height: 10px; opacity: 0.7; }
+            100% { height: 100px; opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(110, 68, 255, 0.3);
+        }
+        .testimonial {
+            background: rgba(110, 68, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 3px solid var(--secondary);
+        }
+        .challenge-card {
+            background: rgba(0, 229, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            height: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 1s ease;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            margin: 10px 0;
+        }
+        .premium-badge {
+            background: var(--premium);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SoulOS</h1>
+            <p class="tagline">The Ultimate Spiritual Operating System</p>
+            <button class="cta-button" id="raiseVibration">Raise Your Vibration Now</button>
+            <button class="cta-button" id="exploreTools">Explore 100+ Spiritual Tools</button>
+            
+            <div class="vibration-box">
+                <div class="vibration-wave"></div>
+            </div>
+            
+            <p>Welcome to your spiritual awakening journey. Begin wherever you feel called.</p>
+        </header>
+
+        <input type="text" class="search-bar" placeholder="🔍 Search 1000+ spiritual concepts...">
+
+        <section>
+            <h2>Daily Spiritual Challenge</h2>
+            <div class="challenge-card">
+                <h3>Day 1: Gratitude Amplification</h3>
+                <p>List 10 things you're grateful for and feel each one deeply.</p>
+                <textarea placeholder="Type your gratitude list here..."></textarea>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="challengeProgress"></div>
+                </div>
+                <button class="cta-button" onclick="completeChallenge()">I Completed This</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>Featured Spiritual Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="openTool('chakra')">
+                    <h3>Chakra Balancer</h3>
+                    <p>Align your 7 chakras with this interactive energy tool.</p>
+                </div>
+                <div class="tool-card" onclick="openTool('manifestation')">
+                    <h3>Manifestation Timer</h3>
+                    <p>Program your desires into reality with cosmic timing.</p>
+                </div>
+                <div class="tool-card" onclick="openTool('aura')">
+                    <h3>Aura Visualizer</h3>
+                    <p>See your energy field in real-time colors.</p>
+                </div>
+                <div class="tool-card" onclick="openTool('shadow')">
+                    <h3>Shadow Work Companion</h3>
+                    <p>Heal hidden traumas with guided prompts.</p>
+                </div>
+                <div class="tool-card" onclick="openTool('third-eye')">
+                    <h3>Third Eye Activator</h3>
+                    <p>Stimulate your pineal gland with binaural beats</p>
+                </div>
+                <div class="tool-card" onclick="openTool('karma')">
+                    <h3>Karma Cleaner</h3>
+                    <p>Clear past life energy blocks</p>
+                </div>
+                <div class="tool-card" onclick="openTool('timeline')">
+                    <h3>Timeline Shifter</h3>
+                    <p>Jump to your desired parallel reality</p>
+                </div>
+                <div class="tool-card" onclick="openTool('gratitude')">
+                    <h3>Gratitude Amplifier</h3>
+                    <p>3-minute gratitude boost</p>
+                </div>
+                <div class="tool-card" onclick="openTool('affirmation')">
+                    <h3>Affirmation Generator</h3>
+                    <p>Personalized high-vibe statements</p>
+                </div>
+                <div class="tool-card" onclick="openTool('energy-test')">
+                    <h3>Energy Test</h3>
+                    <p>Check your current vibration level</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Beginner Spiritual Concepts</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="openConcept('law-of-attraction')">
+                    <h3>Law of Attraction</h3>
+                    <p>Like attracts like. Your thoughts shape reality.</p>
+                </div>
+                <div class="tool-card" onclick="openConcept('subconscious-mind')">
+                    <h3>Subconscious Mind</h3>
+                    <p>Your hidden programming controls 95% of your life.</p>
+                </div>
+                <div class="tool-card" onclick="openConcept('vibration')">
+                    <h3>Vibration</h3>
+                    <p>Everything is energy. Raise yours to attract better.</p>
+                </div>
+                <div class="tool-card" onclick="openConcept('5d')">
+                    <h3>5D Consciousness</h3>
+                    <p>Living beyond time and fear.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Sacred Wisdom Library</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="openTeaching('bhagavad-gita')">
+                    <h3>Bhagavad Gita</h3>
+                    <p>Krishna's timeless wisdom</p>
+                </div>
+                <div class="tool-card" onclick="openTeaching('bible')">
+                    <h3>Bible Codes</h3>
+                    <p>Hidden spiritual secrets</p>
+                </div>
+                <div class="tool-card" onclick="openTeaching('loa')">
+                    <h3>Law of Attraction</h3>
+                    <p>Science of manifestation</p>
+                </div>
+                <div class="tool-card" onclick="openTeaching('quantum')">
+                    <h3>Quantum Jumping</h3>
+                    <p>Shift to better realities</p>
+                </div>
+                <div class="tool-card" onclick="openTeaching('vedic')">
+                    <h3>Vedic Secrets</h3>
+                    <p>Ancient cosmic knowledge</p>
+                </div>
+                <div class="tool-card" onclick="openTeaching('dolores')">
+                    <h3>Dolores Cannon</h3>
+                    <p>Past life regression wisdom</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>User Experiences</h2>
+            <div class="testimonial">
+                <p>"SoulOS helped me manifest my dream job in 3 weeks. The timeline shifting tool is MAGIC!"</p>
+                <p>- Priya K., Mumbai</p>
+            </div>
+            <div class="testimonial">
+                <p>"After using the karma cleaner daily, my anxiety disappeared. I feel lighter than ever before."</p>
+                <p>- Rohan S., Delhi</p>
+            </div>
+        </section>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="cta-button" onclick="shareBlessing()" 
+                style="background: linear-gradient(45deg, #ff00ff, #00ffff);">
+                ✨ Send a Blessing to Friends
+            </button>
+            <p id="shareResult" style="margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <!-- Modal for Tools/Concepts -->
+    <div class="modal" id="toolModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Chakra Balancer</h2>
+            <div id="modalContent">
+                <!-- Dynamic content loads here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Voice Section -->
+    <div id="voiceAssistant" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+        <button class="cta-button" onclick="toggleVoice()" 
+            style="border-radius: 50%; width: 60px; height: 60px; padding: 0; font-size: 1.5rem;">
+            🔊
+        </button>
+    </div>
+
+    <footer>
+        <h3>Ready for <span style="color: var(--secondary)">God Mode</span>?</h3>
+        <p>Unlock these elite features:</p>
+        <ul style="margin: 15px 0; text-align: left; display: inline-block;">
+            <li>Advanced Reality Shifting Tools <span class="premium-badge">PREMIUM</span></li>
+            <li>Sacred Geometry Generator <span class="premium-badge">PREMIUM</span></li>
+            <li>Akashic Records Simulator <span class="premium-badge">PREMIUM</span></li>
+            <li>DNA Light Language Activator <span class="premium-badge">PREMIUM</span></li>
+        </ul>
+        <button class="cta-button premium-button" id="unlockPremium">
+            🔓 Unlock God Mode - ₹999
+        </button>
+        <p style="margin-top: 10px; font-size: 0.9rem;">UPI: keanjohn72@oksbi | Instant access after payment</p>
+    </footer>
+
+    <script>
+        // Simple modal system
+        function openTool(toolName) {
+            const modal = document.getElementById('toolModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            title.textContent = toolName.charAt(0).toUpperCase() + toolName.slice(1).replace('-', ' ');
+            
+            // Tool content
+            if (toolName === 'chakra') {
+                content.innerHTML = `
+                    <p>Spin the wheel to balance your chakras:</p>
+                    <div style="width: 100%; height: 200px; background: #1a0033; border-radius: 10px; display: flex; justify-content: center; align-items: center; margin: 20px 0;">
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(
+                            red 0% 14.28%, 
+                            orange 14.28% 28.56%, 
+                            yellow 28.56% 42.84%, 
+                            green 42.84% 57.12%, 
+                            blue 57.12% 71.4%, 
+                            indigo 71.4% 85.68%, 
+                            violet 85.68% 100%
+                        ); animation: spin 10s linear infinite;"></div>
+                    </div>
+                    <p>Chakras are energy centers in your body. Balanced chakras lead to health, abundance, and spiritual awakening.</p>
+                    <button class="cta-button" style="margin-top: 15px;">Activate Full Chakra Healing</button>
+                `;
+            } 
+            else if (toolName === 'manifestation') {
+                content.innerHTML = `
+                    <p>Set your intention and let the universe handle the timing:</p>
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 15px 0;">
+                        <input type="text" placeholder="Type your desire..." style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 5px;">
+                        <button class="cta-button" style="width: 100%;">Manifest Now</button>
+                    </div>
+                    <p>According to the Vedas, manifestation works when your vibration matches your desire.</p>
+                `;
+            }
+            else if (toolName === 'third-eye') {
+                content.innerHTML = `
+                    <p>Close your eyes and listen for 60 seconds:</p>
+                    <div style="background: #000; border-radius: 10px; padding: 20px; text-align: center; margin: 15px 0;">
+                        <div id="thirdEyeVisual" style="width: 100px; height: 100px; background: purple; 
+                            border-radius: 50%; margin: 0 auto; animation: pulse 3s infinite;"></div>
+                        <p style="margin-top: 15px;">Third Eye Activation in Progress...</p>
+                    </div>
+                    <button class="cta-button" onclick="activateThirdEye()">Activate Now</button>
+                `;
+            }
+            else if (toolName === 'karma') {
+                content.innerHTML = `
+                    <p>Type what you want to release:</p>
+                    <input type="text" id="karmaInput" placeholder="Fear of abandonment..." 
+                        style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.1); 
+                        border: none; color: white; border-radius: 5px;">
+                    <button class="cta-button" onclick="cleanKarma()">Clear This Karma</button>
+                    <div id="karmaResult" style="margin-top: 15px;"></div>
+                `;
+            }
+            else if (toolName === 'timeline') {
+                content.innerHTML = `
+                    <p>Select your desired timeline:</p>
+                    <div style="margin: 15px 0;">
+                        <select style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 5px;">
+                            <option>Abundance Timeline</option>
+                            <option>Love Timeline</option>
+                            <option>Health Timeline</option>
+                            <option>Spiritual Mastery Timeline</option>
+                        </select>
+                    </div>
+                    <button class="cta-button" onclick="shiftTimeline()">Shift Now</button>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">According to quantum physics, infinite parallel realities exist. You can jump!</p>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function openConcept(conceptName) {
+            const modal = document.getElementById('toolModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            title.textContent = conceptName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            
+            if (conceptName === 'law-of-attraction') {
+                content.innerHTML = `
+                    <h3 style="color: var(--secondary); margin: 15px 0;">The Universal Law</h3>
+                    <p>What you focus on expands. Your thoughts, emotions, and beliefs act like a magnet, attracting matching experiences.</p>
+                    <p><strong>Key Principles:</strong></p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>Like attracts like</li>
+                        <li>Your vibration determines what you attract</li>
+                        <li>The universe mirrors your dominant state</li>
+                    </ul>
+                    <p style="margin-top: 20px;"><em>"As a man thinketh in his heart, so is he."</em> — Bible</p>
+                    <button class="cta-button" style="margin-top: 20px;">Practice This Now</button>
+                `;
+            } 
+            else if (conceptName === '5d') {
+                content.innerHTML = `
+                    <h3 style="color: var(--secondary); margin: 15px 0;">Fifth-Dimensional Living</h3>
+                    <p>5D consciousness means living beyond fear, time, and separation. It's the state of oneness with all creation.</p>
+                    <p><strong>Signs You're Shifting to 5D:</strong></p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>Synchronicities increase</li>
+                        <li>Time feels fluid</li>
+                        <li>You feel connected to everything</li>
+                        <li>Old fears dissolve</li>
+                    </ul>
+                    <button class="cta-button" style="margin-top: 15px;">Activate Your 5D DNA</button>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function openTeaching(teachingName) {
+            const modal = document.getElementById('toolModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            title.textContent = teachingName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            
+            if (teachingName === 'bhagavad-gita') {
+                content.innerHTML = `
+                    <h3 style="color: var(--secondary); margin: 15px 0;">Bhagavad Gita Wisdom</h3>
+                    <p><em>"You have the right to work, but never to the fruit of work."</em> — Chapter 2, Verse 47</p>
+                    <p style="margin: 15px 0;">The Gita teaches detached action - perform your duty without attachment to results.</p>
+                    <p><strong>Key Lessons:</strong></p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>The soul is eternal, the body temporary</li>
+                        <li>Do your dharma (sacred duty)</li>
+                        <li>Surrender outcomes to the Divine</li>
+                        <li>Meditation leads to self-realization</li>
+                    </ul>
+                `;
+            }
+            else if (teachingName === 'bible') {
+                content.innerHTML = `
+                    <h3 style="color: var(--secondary); margin: 15px 0;">Bible Mysteries Decoded</h3>
+                    <p><em>"The kingdom of God is within you."</em> — Luke 17:21</p>
+                    <p style="margin: 15px 0;">Hidden spiritual secrets in the Bible:</p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>The power of speaking things into existence</li>
+                        <li>Walking on water = mastering your emotions</li>
+                        <li>12 disciples represent 12 spiritual faculties</li>
+                        <li>Resurrection symbolizes consciousness awakening</li>
+                    </ul>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('toolModal').style.display = 'none';
+        }
+
+        // Tool Functions
+        function activateThirdEye() {
+            const visual = document.getElementById('thirdEyeVisual');
+            visual.style.background = 'radial-gradient(circle, #ff00ff, #9900ff)';
+            visual.style.boxShadow = '0 0 20px #ff00ff';
+            setTimeout(() => {
+                alert("Third Eye Activation Complete!\n\nYou may experience enhanced intuition today.");
+            }, 2000);
+        }
+
+        function cleanKarma() {
+            const input = document.getElementById('karmaInput').value;
+            const resultDiv = document.getElementById('karmaResult');
+            
+            if(input) {
+                resultDiv.innerHTML = `
+                    <p>Clearing karma: <strong>${input}</strong></p>
+                    <div style="width: 100%; height: 5px; background: linear-gradient(to right, red, yellow, green); 
+                        margin: 10px 0; border-radius: 5px;"></div>
+                    <p>Karma cleared! Feel lighter?</p>
+                `;
+            } else {
+                resultDiv.innerHTML = '<p style="color: var(--secondary)">Please enter what you want to release</p>';
+            }
+        }
+
+        function shiftTimeline() {
+            alert("Timeline Shift Initiated!\n\nNotice synchronicities in the next 24 hours.");
+        }
+
+        // Instant vibration raiser
+        document.getElementById('raiseVibration').addEventListener('click', function() {
+            alert('✨ Your vibration is now rising! ✨\n\nAffirmation: "I am a magnet for miracles."');
+            document.body.style.background = 'linear-gradient(to bottom, #0f0721, #2a0b63)';
+            setTimeout(() => {
+                document.body.style.background = 'var(--dark)';
+            }, 1000);
+        });
+
+        // Daily challenge
+        function completeChallenge() {
+            document.getElementById('challengeProgress').style.width = '100%';
+            setTimeout(() => {
+                alert("Challenge Complete! 🎉\n\nYou've raised your vibration today.");
+            }, 500);
+        }
+
+        // Premium unlock
+        document.getElementById('unlockPremium').addEventListener('click', function() {
+            alert('Send ₹999 to UPI: keanjohn72@oksbi\n\nYou will instantly receive God Mode access.');
+        });
+
+        // Viral sharing
+        function shareBlessing() {
+            const blessings = [
+                "I'm sending you divine light!",
+                "Your aura is glowing today!",
+                "The universe is conspiring in your favor!",
+                "Abundance flows to you easily!",
+                "You are protected by angels!"
+            ];
+            
+            const randomBlessing = blessings[Math.floor(Math.random() * blessings.length)];
+            const shareText = `${randomBlessing} ✨ Experience spiritual awakening at ${window.location.href}`;
+            
+            if(navigator.share) {
+                navigator.share({
+                    title: 'A Spiritual Blessing For You',
+                    text: shareText
+                });
+            } else {
+                document.getElementById('shareResult').innerHTML = `
+                    <p>Copy this blessing to share:</p>
+                    <textarea style="width: 100%; padding: 10px; border-radius: 5px; margin: 10px 0;" rows="3">${shareText}</textarea>
+                `;
+            }
+        }
+
+        // AI Voice Assistant
+        let voiceActive = false;
+        const affirmations = [
+            "You are divine consciousness having a human experience",
+            "The universe supports you in every way",
+            "Your thoughts create your reality",
+            "You are worthy of infinite abundance",
+            "Every cell in your body vibrates with energy"
+        ];
+
+        function toggleVoice() {
+            voiceActive = !voiceActive;
+            if(voiceActive) {
+                speakAffirmation();
+                document.querySelector('#voiceAssistant button').textContent = '🔊';
+                document.querySelector('#voiceAssistant button').style.backgroundColor = 'var(--primary)';
+            } else {
+                window.speechSynthesis.cancel();
+                document.querySelector('#voiceAssistant button').textContent = '🔇';
+                document.querySelector('#voiceAssistant button').style.backgroundColor = '#666';
+            }
+        }
+
+        function speakAffirmation() {
+            if(!voiceActive) return;
+            
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = affirmations[Math.floor(Math.random() * affirmations.length)];
+            msg.rate = 0.9;
+            msg.pitch = 1.2;
+            window.speechSynthesis.speak(msg);
+            
+            msg.onend = function() {
+                setTimeout(speakAffirmation, 30000); // Speak every 30 seconds
+            };
+        }
+    </script>
+</body>
+</html>
