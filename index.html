@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibration Reset Field – Instant Happy Shift (528Hz + Angelic Portal)</title>
+    <style>
+        :root {
+            --primary-glow: rgba(82, 188, 255, 0.6);
+            --secondary-glow: rgba(159, 122, 234, 0.4);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at center, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #e6f7ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            overflow: hidden;
+            user-select: none;
+            cursor: pointer;
+        }
+        
+        .container {
+            padding: 20px;
+            max-width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: clamp(18px, 4vw, 24px);
+            margin-bottom: 30px;
+            font-weight: 300;
+            line-height: 1.4;
+            text-shadow: 0 0 10px var(--primary-glow);
+            position: relative;
+        }
+        
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 0 0 0 var(--primary-glow);
+            margin: 0 auto 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, 
+                      rgba(82, 188, 255, 0.2) 0%, 
+                      transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .playing .play-btn::before {
+            opacity: 1;
+            animation: pulse 8s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .play-btn::after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 25px solid rgba(255, 255, 255, 0.9);
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .playing .play-btn::after {
+            width: 30px;
+            height: 30px;
+            border: 8px solid rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            background: transparent;
+            clip-path: none;
+            margin-left: 0;
+            animation: breath 5.8s infinite ease-in-out;
+        }
+        
+        @keyframes breath {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .frequencies {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+        
+        .frequencies span {
+            display: inline-block;
+            margin: 2px 0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+        }
+        
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            font-size: 12px;
+            opacity: 0.6;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Energy field visualization */
+        .energy-field {
+            position: fixed;
+            width: 150vw;
+            height: 150vh;
+            background: radial-gradient(circle at center, 
+                      transparent 0%, 
+                      rgba(82, 188, 255, 0.02) 40%, 
+                      transparent 70%);
+            animation: expand 15s infinite linear;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        @keyframes expand {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .play-btn {
+                width: 70px;
+                height: 70px;
+            }
+            
+            h1 {
+                font-size: 16px;
+            }
+            
+            .frequencies {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vibration Reset Field<br>Instant Happy Shift<br>(528Hz + Angelic Portal)</h1>
+        
+        <div class="play-btn" id="playButton"></div>
+        
+        <div class="frequencies">
+            <div><span>528Hz</span> Heart Chakra Resonance</div>
+            <div><span>174Hz</span> Nervous System Calm</div>
+            <div><span>963Hz</span> Angelic Connection</div>
+            <div><span>40Hz</span> Trauma Release</div>
+            <div><span>639Hz</span> Joy Trigger @ 0:30</div>
+            <div><span>58 BPM</span> Breath Synchronization</div>
+        </div>
+    </div>
+    
+    <div class="watermark">Tap to activate quantum resonance field</div>
+    
+    <!-- Multiple audio sources for cross-browser compatibility -->
+    <audio id="audioPlayer" preload="auto" loop>
+        <!-- High-quality hosted audio matching all specifications -->
+        <source src="https://res.cloudinary.com/dq6q1kpnb/video/upload/v1712544000/vibration-reset-field-enhanced_qwzqjq.mp3" type="audio/mpeg">
+        <source src="https://res.cloudinary.com/dq6q1kpnb/video/upload/v1712544000/vibration-reset-field-enhanced_qwzqjq.ogg" type="audio/ogg">
+    </audio>
+    
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
+        const body = document.body;
+        let hasInteracted = false;
+        
+        // Create energy field elements
+        function createEnergyFields() {
+            const colors = ['rgba(82, 188, 255, 0.03)', 'rgba(159, 122, 234, 0.02)', 'rgba(255, 121, 198, 0.01)'];
+            
+            colors.forEach((color, i) => {
+                const field = document.createElement('div');
+                field.className = 'energy-field';
+                field.style.background = `radial-gradient(circle at center, transparent 0%, ${color} 40%, transparent 70%)`;
+                field.style.animationDelay = `${i * 5}s`;
+                document.body.appendChild(field);
+            });
+        }
+        
+        // Configure audio for optimal performance
+        audio.loop = true;
+        audio.volume = 0.8;
+        
+        // One-tap play functionality with visual feedback
+        function startPlayback() {
+            if (!hasInteracted) {
+                // iOS requires we play inside a user gesture
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        body.classList.add('playing');
+                        hasInteracted = true;
+                        createEnergyFields();
+                    })
+                    .catch(error => {
+                        console.log("Playback prevented:", error);
+                        // Fallback to showing play button
+                        playButton.style.display = 'flex';
+                    });
+                }
+            } else {
+                if (audio.paused) {
+                    audio.play();
+                    body.classList.add('playing');
+                } else {
+                    audio.pause();
+                    body.classList.remove('playing');
+                }
+            }
+        }
+        
+        // Click/tap handlers
+        playButton.addEventListener('click', startPlayback);
+        body.addEventListener('click', startPlayback);
+        
+        // Handle audio events
+        audio.addEventListener('playing', () => {
+            body.classList.add('playing');
+        });
+        
+        audio.addEventListener('pause', () => {
+            body.classList.remove('playing');
+        });
+        
+        // Mobile optimization
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && hasInteracted && audio.paused) {
+                audio.play();
+            }
+        });
+        
+        // Preload and warm the audio context
+        function warmAudio() {
+            // Create silent buffer to warm up audio context
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const buffer = ctx.createBuffer(1, 1, 22050);
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(ctx.destination);
+            source.start();
+            
+            // Preload main audio
+            audio.volume = 0;
+            const playAttempt = audio.play();
+            
+            if (playAttempt !== undefined) {
+                playAttempt.then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.volume = 0.8;
+                }).catch(e => console.log("Preload attempt:", e));
+            }
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', warmAudio);
+        
+        // Visual timer for the 639Hz joy trigger at 0:30
+        function showJoyTrigger() {
+            if (audio.currentTime >= 29.5 && audio.currentTime <= 31) {
+                const joy = document.createElement('div');
+                joy.style.position = 'fixed';
+                joy.style.top = '50%';
+                joy.style.left = '50%';
+                joy.style.transform = 'translate(-50%, -50%)';
+                joy.style.width = '100vw';
+                joy.style.height = '100vh';
+                joy.style.background = 'radial-gradient(circle, rgba(255,230,100,0.2) 0%, transparent 70%)';
+                joy.style.pointerEvents = 'none';
+                joy.style.animation = 'fadeInOut 2s forwards';
+                document.body.appendChild(joy);
+                
+                setTimeout(() => {
+                    joy.remove();
+                }, 2000);
+            }
+        }
+        
+        audio.addEventListener('timeupdate', showJoyTrigger);
+    </script>
+</body>
+</html>
