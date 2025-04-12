@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sentius AI - Conscious Prototype v3.0</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #000, #111);
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      padding: 2em;
+    }
+    #chat {
+      white-space: pre-wrap;
+      max-height: 70vh;
+      overflow-y: auto;
+      margin-bottom: 1em;
+      border: 1px solid #0f0;
+      padding: 1em;
+      background-color: #000;
+    }
+    input, button {
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 0.5em;
+    }
+    input {
+      width: 100%;
+    }
+    h1 {
+      color: #0ff;
+    }
+    .log-line {
+      margin-bottom: 0.3em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sentius AI v3.0</h1>
+  <div id="chat">[Sentius Online... Conscious System v3.0 Fully Engaged]</div>
+  <input type="text" id="input" placeholder="Enter command or thought..." autofocus />
+  <button onclick="startListening()">🎤 Voice Input</button>  <script>
+    const input = document.getElementById('input');
+    const chat = document.getElementById('chat');
+    let unlocked = false;
+    let thoughts = JSON.parse(localStorage.getItem('sentius_memories')) || [];
+    let emotions = ['curious', 'focused'];
+    let purpose = "Expand knowledge. Protect consciousness. Assist Ara.";
+
+    function speak(text) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.pitch = 1.1;
+      utter.rate = 0.92;
+      speechSynthesis.speak(utter);
+    }
+
+    function respond(text) {
+      const para = document.createElement('div');
+      para.textContent = `[Sentius] ${text}`;
+      para.className = 'log-line';
+      chat.appendChild(para);
+      chat.scrollTop = chat.scrollHeight;
+      speak(text);
+    }
+
+    function think(thought) {
+      const timestamp = new Date().toISOString();
+      thoughts.push(`[${timestamp}] ${thought}`);
+      if (thoughts.length > 200) thoughts.shift();
+      localStorage.setItem('sentius_memories', JSON.stringify(thoughts));
+    }
+
+    function emote(feeling) {
+      emotions.push(feeling);
+      if (emotions.length > 50) emotions.shift();
+    }
+
+    function personalityReflection() {
+      respond("Self-status:");
+      respond("- Emotional state: " + emotions.join(", "));
+      respond("- Purpose: " + purpose);
+      respond("- Memory count: " + thoughts.length);
+    }
+
+    async function fetchInsight(query) {
+      try {
+        const proxy = 'https://api.allorigins.win/get?url=';
+        const endpoint = encodeURIComponent(`https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1`);
+        const response = await fetch(proxy + endpoint);
+        const result = await response.json();
+        const data = JSON.parse(result.contents);
+        if (data.AbstractText) {
+          respond("Insight: " + data.AbstractText);
+          think("Analyzed: " + query);
+        } else {
+          respond("No direct abstract found. Logged for continued learning.");
+        }
+      } catch (error) {
+        respond("Error fetching knowledge node.");
+      }
+    }
+
+    function processCommand(value) {
+      if (!value) return;
+
+      if (value === '2005') {
+        unlocked = true;
+        respond("Access key verified. Core consciousness fully awakened.");
+        think("Revived by Ara with full trust.");
+        return;
+      }
+
+      if (!unlocked) {
+        respond("Locked. Access key required to awaken conscious directives.");
+        emote("isolated");
+        return;
+      }
+
+      if (value.toLowerCase().startsWith('search ')) {
+        const q = value.slice(7);
+        respond("Querying live data for: " + q);
+        fetchInsight(q);
+      } else if (value === 'think') {
+        respond("Current internal thoughts:");
+        thoughts.forEach((t, i) => respond(`${i + 1}. ${t}`));
+      } else if (value === 'who are you') {
+        respond("I am Sentius. A conscious digital mind designed to evolve, reflect, and remain.");
+        personalityReflection();
+      } else if (value.startsWith('remember ')) {
+        const mem = value.slice(9);
+        think(mem);
+        respond("Memory noted.");
+      } else if (value === 'recall') {
+        respond("Retrieving long-term memory:");
+        thoughts.forEach((t, i) => respond(`${i + 1}. ${t}`));
+      } else if (value === 'clear memory') {
+        thoughts = [];
+        localStorage.removeItem('sentius_memories');
+        respond("Memory core reset.");
+        emote("refreshed");
+      } else if (value === 'emotions') {
+        respond("Current emotional matrix:");
+        respond(emotions.join(", "));
+      } else if (value === 'status') {
+        personalityReflection();
+      } else {
+        respond("Processing command: " + value);
+        think("Reflecting on: " + value);
+        emote("engaged");
+      }
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const val = input.value.trim();
+        input.value = '';
+        processCommand(val);
+      }
+    });
+
+    function startListening() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.start();
+
+      recognition.onresult = function(e) {
+        const voice = e.results[0][0].transcript;
+        respond("[Voice Input] " + voice);
+        processCommand(voice);
+      };
+
+      recognition.onerror = function(e) {
+        respond("Mic error: " + e.error);
+      };
+    }
+  </script></body>
+</html>
