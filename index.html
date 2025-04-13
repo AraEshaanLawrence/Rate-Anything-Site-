@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Super AI Chat</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    #chat { max-width: 600px; margin: auto; }
+    .msg { margin: 10px 0; }
+    .user { color: #00ffe7; }
+    .ai { color: #ffcc00; }
+    input, button {
+      width: 100%; padding: 10px; margin-top: 10px;
+      border: none; border-radius: 4px;
+      font-size: 16px;
+    }
+    button { background: #333; color: white; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <div class="msg ai">AI: Hello! I’m ready to chat with you.</div>
+  </div>
+  <input id="input" type="text" placeholder="Type your message..." />
+  <button onclick="send()">Send</button>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const API_KEY = "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";
+    const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+    async function send() {
+      const message = input.value.trim();
+      if (!message) return;
+      chat.innerHTML += `<div class="msg user">You: ${message}</div>`;
+      input.value = "";
+
+      const headers = {
+        "Authorization": `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      };
+
+      const body = JSON.stringify({
+        model: "openai/gpt-3.5-turbo",
+        messages: [{ role: "user", content: message }]
+      });
+
+      const res = await fetch(API_URL, { method: "POST", headers, body });
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || "Error: No reply";
+
+      chat.innerHTML += `<div class="msg ai">AI: ${reply}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") send();
+    });
+  </script>
+</body>
+</html>
