@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MysteryBox Arena PRO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1e1e1e);
+      color: white;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 20px;
+      background-color: #121212;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      color: #ffcc00;
+    }
+    .hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+    .hero h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #f0f0f0;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: #bbbbbb;
+    }
+    .cta-btn {
+      background: linear-gradient(90deg, #ff6600, #ff9900);
+      padding: 16px 40px;
+      font-size: 1.4rem;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 0 15px #ff6600a0;
+    }
+    .cta-btn:hover {
+      background: #ff5500;
+    }
+    .mystery-box {
+      width: 160px;
+      height: 160px;
+      background: url('https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif') no-repeat center center / cover;
+      margin: 30px auto;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #ffd700;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .reward {
+      font-size: 1.5rem;
+      color: #00ffcc;
+      margin-top: 20px;
+    }
+    .feed {
+      margin: 40px 20px 20px;
+      background-color: #111;
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      color: #bbb;
+    }
+    .feed-item {
+      margin-bottom: 6px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.8rem;
+      color: #666;
+      padding-bottom: 40px;
+    }
+    .timer {
+      font-size: 1rem;
+      color: #ff4444;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>  <header>
+    <h1>MysteryBox Arena PRO</h1>
+  </header>  <div class="hero">
+    <h2>Only ₹9 to Open a Box & Win Real Rewards</h2>
+    <p>Instant cashback, UPI bonuses, and digital loot drops</p><div class="timer" id="countdown">Offer ends in: 59s</div>
+
+<a href="upi://pay?pa=keanjohn72@oksbi&pn=MysteryBox&am=9&cu=INR" target="_blank">
+  <button class="cta-btn">Unlock Your First Box</button>
+</a>
+
+<div class="mystery-box" onclick="openBox()"></div>
+<div class="reward" id="reward"></div>
+
+<div class="feed" id="feed"></div>
+
+  </div>  <div class="footer">
+    © 2025 MysteryBox Inc. | Verified Rewards | Powered by SmartLootAI
+  </div>  <script>
+    const rewards = ["₹10 Cashback", "₹20 UPI Voucher", "₹100 Bonus", "Exclusive eBook", "Canva Pro 7 Days", "₹50 Paytm Cash", "Crypto Reward"];
+    const fakeUsers = ["Riya", "Aarav", "Simran", "Kabir", "Meera", "Aryan", "Tanya", "Ishaan"];
+    const fakeWins = ["₹100", "₹50", "Voucher", "Secret Link", "Premium Code"];
+
+    function openBox() {
+      const win = rewards[Math.floor(Math.random() * rewards.length)];
+      document.getElementById("reward").innerText = `You unlocked: ${win}!`;
+      confetti();
+    }
+
+    function updateFeed() {
+      const feed = document.getElementById("feed");
+      feed.innerHTML = "";
+      for (let i = 0; i < 8; i++) {
+        const name = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+        const reward = fakeWins[Math.floor(Math.random() * fakeWins.length)];
+        const item = document.createElement("div");
+        item.className = "feed-item";
+        item.innerText = `${name} just won ${reward}`;
+        feed.appendChild(item);
+      }
+    }
+
+    function confetti() {
+      alert("Confetti & Sound Effect Placeholder");
+    }
+
+    let seconds = 59;
+    setInterval(() => {
+      if (seconds > 0) {
+        document.getElementById("countdown").innerText = `Offer ends in: ${seconds--}s`;
+      }
+    }, 1000);
+
+    updateFeed();
+    setInterval(updateFeed, 7000);
+  </script></body>
+</html>
