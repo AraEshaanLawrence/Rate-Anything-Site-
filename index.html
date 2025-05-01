@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unlock Your Mystery Box</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 50px;
+      color: #FFD700;
+    }
+    .container {
+      margin-top: 30px;
+      padding: 20px;
+    }
+    .cta-button {
+      background-color: #1db954;
+      border: none;
+      padding: 20px 40px;
+      font-size: 1.5em;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 20px;
+    }
+    .cta-button:hover {
+      background-color: #17a44b;
+    }
+    .reward-box {
+      display: none;
+      background-color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+    .reward-box h2 {
+      font-size: 2em;
+      color: #FFD700;
+    }
+    .reward-box p {
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+    .payment-link {
+      background-color: #ff9100;
+      color: white;
+      padding: 15px 40px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 1.5em;
+      transition: background 0.3s ease;
+    }
+    .payment-link:hover {
+      background-color: #e67e00;
+    }
+    .countdown {
+      font-size: 1.5em;
+      color: #ff0000;
+      margin-top: 10px;
+    }
+    .social-proof {
+      margin-top: 30px;
+      font-size: 1.1em;
+      color: #FFD700;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to the Mystery Box!</h1>
+  <p>Unlock your surprise with a small payment and see what you get!</p>
+
+  <!-- Payment Link (UPI or Gateway) -->
+  <a href="upi://pay?pa=keanjohn72@oksbi&pn=Your%20Name&mc=1234&tid=00001&tn=Mystery%20Box&am=9.00&cu=INR" class="payment-link" target="_blank">
+    Pay ₹9 to Unlock Now
+  </a>
+
+  <div class="container">
+    <div id="reward" class="reward-box">
+      <h2>Your Reward: <span id="reward-amount">₹10</span></h2>
+      <p>Check back tomorrow for more rewards!</p>
+    </div>
+    
+    <!-- Social Proof Example -->
+    <div class="social-proof">
+      <p>Just now: <strong>John Doe</strong> unlocked a ₹50 reward!</p>
+      <p>Last week: <strong>Alice</strong> won ₹100!</p>
+    </div>
+    
+    <div class="footer">
+      <p>Only a few boxes left at this price! Hurry up!</p>
+      <div id="countdown" class="countdown">Time left: 10s</div>
+    </div>
+  </div>
+
+  <script>
+    // Rewards array
+    const rewards = ["₹10", "₹20", "₹50", "₹100", "Digital Tip", "Coupon Code"];
+    let countdown = 10; // Countdown timer
+
+    // Unlock box function
+    function unlockBox() {
+      const reward = rewards[Math.floor(Math.random() * rewards.length)];
+      document.getElementById("reward-amount").innerText = reward;
+      document.getElementById("reward").style.display = "block";
+      // Simulate a countdown for urgency
+      let timer = setInterval(() => {
+        if (countdown <= 0) {
+          clearInterval(timer);
+          document.getElementById("countdown").innerText = "Box expired!";
+        } else {
+          document.getElementById("countdown").innerText = "Hurry! Time left: " + countdown + "s";
+          countdown--;
+        }
+      }, 1000);
+    }
+
+    // Simulate unlocking after payment
+    setTimeout(unlockBox, 3000); // Automatically unlocks after a delay for demo
+
+  </script>
+
+</body>
+</html>
