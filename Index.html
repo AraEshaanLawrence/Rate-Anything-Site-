@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ad-Free YouTube via Piped</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    input {
+      padding: 12px;
+      font-size: 16px;
+      width: 60%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1db954;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1ed760;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #aaaaaa;
+    }
+    a {
+      color: #1db954;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Watch YouTube Without Ads</h1>
+  <input type="text" id="query" placeholder="Type your search...">
+  <br>
+  <button onclick="search()">Search on Piped</button>
+
+  <div class="footer">
+    Powered by <a href="https://piped.video" target="_blank">Piped.video</a> – no ads, no tracking.
+  </div>
+
+  <script>
+    function search() {
+      const query = document.getElementById('query').value.trim();
+      if (query) {
+        const pipedURL = `https://piped.video/results?search_query=${encodeURIComponent(query)}`;
+        window.open(pipedURL, '_blank');
+      } else {
+        alert('Please type something to search!');
+      }
+    }
+  </script>
+
+</body>
+</html>
