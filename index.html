@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Wheel | Spin & Win</title>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --accent-purple: #6a0dad;
+            --accent-gold: #ffd700;
+            --accent-gold-light: #fff9c4;
+            --text-light: #f5f5f5;
+            --text-dim: #aaaaaa;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(106, 13, 173, 0.15) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--accent-gold), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .balance-amount {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .add-funds {
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-funds:hover {
+            background: #7b1fa2;
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+        }
+
+        @media (min-width: 768px) {
+            .wheel-container {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            transform: rotate(0deg);
+            border: 8px solid var(--accent-gold);
+        }
+
+        .wheel-center {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            border: 3px solid white;
+        }
+
+        .wheel-center::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid var(--accent-gold);
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+            z-index: 5;
+        }
+
+        .wheel-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .wheel-section-text {
+            position: absolute;
+            right: 10px;
+            transform: rotate(90deg);
+            transform-origin: right;
+            white-space: nowrap;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-size: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .wheel-section-text {
+                font-size: 14px;
+            }
+        }
+
+        .spin-btn {
+            background: linear-gradient(to bottom, var(--accent-gold), #daa520);
+            color: var(--bg-dark);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spin-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 48%,
+                rgba(255, 255, 255, 0) 52%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: all 0.3s ease;
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .spin-btn:hover::before {
+            left: 100%;
+            top: 100%;
+        }
+
+        .spin-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spin-btn:disabled::before {
+            display: none;
+        }
+
+        .jackpot-banner {
+            background: linear-gradient(to right, #ff0000, #ff8c00, #ffd700, #ff8c00, #ff0000);
+            background-size: 200% auto;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            animation: shine 2s linear infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .recent-wins {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .recent-wins-title {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold-light);
+            font-size: 1.1rem;
+        }
+
+        .wins-list {
+            list-style: none;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .wins-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .wins-list::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 5px;
+        }
+
+        .win-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .win-item:last-child {
+            border-bottom: none;
+        }
+
+        .win-amount {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .win-highlight {
+            animation: highlight 2s;
+        }
+
+        @keyframes highlight {
+            0% { background: rgba(255, 215, 0, 0.3); }
+            100% { background: transparent; }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom, #1a1a1a, #0a0a0a);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--accent-gold);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .modal-text {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background: rgba(106, 13, 173, 0.3);
+        }
+
+        .payment-method.selected {
+            background: rgba(106, 13, 173, 0.5);
+            border: 1px solid var(--accent-purple);
+        }
+
+        .payment-method img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .payment-details {
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-amount {
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            background: #7b1fa2;
+        }
+
+        .win-modal .modal-content {
+            text-align: center;
+        }
+
+        .win-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            to {
+                transform: translateY(-10px);
+            }
+        }
+
+        .win-message {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .win-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .win-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .win-actions button:first-child {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            border: none;
+        }
+
+        .win-actions button:last-child {
+            background: none;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+
+        .win-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-gold);
+            opacity: 0;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            width: 100%;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .timer {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .timer span {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* Psychological triggers */
+        .urgency-banner {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        .social-proof {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .social-proof img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">LUXURY WHEEL</div>
+            <div class="balance">
+                <span>Balance: <span class="balance-amount">₹500</span></span>
+                <button class="add-funds">+ Add Funds</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="jackpot-banner pulse">
+                DAILY JACKPOT: ₹25,000
+            </div>
+
+            <div class="urgency-banner">
+                🔥 LIMITED TIME OFFER: Get 2x rewards on your next spin!
+            </div>
+
+            <div class="wheel-container">
+                <div class="wheel-arrow"></div>
+                <div class="wheel" id="wheel"></div>
+                <div class="wheel-center"></div>
+            </div>
+
+            <button class="spin-btn" id="spinBtn">SPIN TO WIN</button>
+
+            <div class="timer">
+                Next free spin in: <span id="freeSpinTimer">04:59</span>
+            </div>
+
+            <div class="recent-wins">
+                <div class="recent-wins-title">RECENT WINS</div>
+                <ul class="wins-list" id="winsList">
+                    <!-- Wins will be added here dynamically -->
+                </ul>
+            </div>
+
+            <div class="social-proof">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                <span>Riya won ₹1,500 just now!</span>
+            </div>
+        </div>
+
+        <footer>
+            © 2023 Luxury Wheel | Play responsibly
+        </footer>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closePaymentModal">&times;</button>
+            <div class="modal-title">ADD FUNDS</div>
+            <div class="modal-text">
+                Add funds to your account to keep playing and win big!
+            </div>
+            
+            <div class="payment-method selected">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI">
+                <div>
+                    <div>UPI Payment</div>
+                    <div style="font-size: 0.8rem; color: var(--text-dim);">Instant deposit</div>
+                </div>
+            </div>
+            
+            <div class="payment-details">
+                <div class="payment-row">
+                    <div>Amount:</div>
+                    <div class="payment-amount">₹1,000</div>
+                </div>
+                <div class="payment-row">
+                    <div>UPI ID:</div>
+                    <div>keanjohn72@oksbi</div>
+                </div>
+            </div>
+            
+            <button class="confirm-btn" id="confirmPayment">CONFIRM PAYMENT</button>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div class="modal win-modal" id="winModal">
+        <div class="modal-content">
+            <div class="win-emoji">🎉</div>
+            <div class="modal-title">CONGRATULATIONS!</div>
+            <div class="win-message" id="winMessage">You won ₹1,000!</div>
+            
+            <div class="win-actions">
+                <button id="playAgainBtn">SPIN AGAIN</button>
+                <button id="withdrawBtn">WITHDRAW</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wheel configuration
+            const wheel = document.getElementById('wheel');
+            const spinBtn = document.getElementById('spinBtn');
+            const balanceAmount = document.querySelector('.balance-amount');
+            const winsList = document.getElementById('winsList');
+            const paymentModal = document.getElementById('paymentModal');
+            const closePaymentModal = document.getElementById('closePaymentModal');
+            const addFundsBtn = document.querySelector('.add-funds');
+            const confirmPaymentBtn = document.getElementById('confirmPayment');
+            const winModal = document.getElementById('winModal');
+            const winMessage = document.getElementById('winMessage');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const freeSpinTimer = document.getElementById('freeSpinTimer');
+
+            // Wheel sections
+            const sections = [
+                { text: "₹500", color: "#4CAF50", value: 500 },
+                { text: "₹200", color: "#2196F3", value: 200 },
+                { text: "₹100", color: "#FFC107", value: 100 },
+                { text: "₹50", color: "#9C27B0", value: 50 },
+                { text: "₹1,000", color: "#FF5722", value: 1000 },
+                { text: "₹200", color: "#2196F3", value: 200 },
+                { text: "TRY AGAIN", color: "#607D8B", value: 0 },
+                { text: "₹500", color: "#4CAF50", value: 500 },
+                { text: "Win a chance to date Sofia Blaze", color: "#E91E63", value: -1, special: true },
+                { text: "₹100", color: "#FFC107", value: 100 },
+                { text: "₹1,500", color: "#3F51B5", value: 1500 },
+                { text: "Win a chance to date Sofia Blaze", color: "#E91E63", value: -1, special: true }
+            ];
+
+            let balance = 500;
+            let isSpinning = false;
+            let currentRotation = 0;
+            let freeSpinTime = 5 * 60; // 5 minutes in seconds
+
+            // Create wheel sections
+            function createWheel() {
+                const sectionAngle = 360 / sections.length;
+                
+                sections.forEach((section, index) => {
+                    const sectionEl = document.createElement('div');
+                    sectionEl.className = 'wheel-section';
+                    sectionEl.style.transform = `rotate(${index * sectionAngle}deg)`;
+                    sectionEl.style.backgroundColor = section.color;
+                    
+                    const textEl = document.createElement('div');
+                    textEl.className = 'wheel-section-text';
+                    textEl.textContent = section.text;
+                    
+                    sectionEl.appendChild(textEl);
+                    wheel.appendChild(sectionEl);
+                });
+            }
+
+            // Spin the wheel
+            function spinWheel() {
+                if (isSpinning) return;
+                
+                // Check balance
+                if (balance < 100) {
+                    showPaymentModal();
+                    return;
+                }
+                
+                isSpinning = true;
+                spinBtn.disabled = true;
+                
+                // Deduct spin cost
+                balance -= 100;
+                updateBalance();
+                
+                // Generate random result (but avoid special sections)
+                let resultIndex;
+                do {
+                    resultIndex = Math.floor(Math.random() * sections.length);
+                } while (sections[resultIndex].special);
+                
+                // Calculate rotation (5 full rotations + offset to land on selected section)
+                const sectionAngle = 360 / sections.length;
+                const targetRotation = 5 * 360 + (360 - (resultIndex * sectionAngle + sectionAngle / 2));
+                
+                // Apply rotation
+                currentRotation += targetRotation;
+                wheel.style.transform = `rotate(${currentRotation}deg)`;
+                
+                // Show result after animation
+                setTimeout(() => {
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                    
+                    const winAmount = sections[resultIndex].value;
+                    if (winAmount > 0) {
+                        balance += winAmount;
+                        updateBalance();
+                        showWin(winAmount);
+                        addWinToHistory(winAmount);
+                    }
+                }, 4000);
+            }
+
+            // Update balance display
+            function updateBalance() {
+                balanceAmount.textContent = `₹${balance.toLocaleString()}`;
+            }
+
+            // Add win to history
+            function addWinToHistory(amount) {
+                const winItem = document.createElement('li');
+                winItem.className = 'win-item win-highlight';
+                winItem.innerHTML = `
+                    <span>New win!</span>
+                    <span class="win-amount">₹${amount.toLocaleString()}</span>
+                `;
+                
+                winsList.insertBefore(winItem, winsList.firstChild);
+                
+                // Remove highlight after animation
+                setTimeout(() => {
+                    winItem.classList.remove('win-highlight');
+                }, 2000);
+                
+                // Limit history to 10 items
+                if (winsList.children.length > 10) {
+                    winsList.removeChild(winsList.lastChild);
+                }
+            }
+
+            // Show payment modal
+            function showPaymentModal() {
+                paymentModal.classList.add('active');
+            }
+
+            // Hide payment modal
+            function hidePaymentModal() {
+                paymentModal.classList.remove('active');
+            }
+
+            // Show win modal
+            function showWin(amount) {
+                winMessage.textContent = `You won ₹${amount.toLocaleString()}!`;
+                
+                // Create confetti
+                createConfetti();
+                
+                winModal.classList.add('active');
+            }
+
+            // Hide win modal
+            function hideWinModal() {
+                winModal.classList.remove('active');
+            }
+
+            // Create confetti effect
+            function createConfetti() {
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+                
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.top = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Animate confetti
+                    setTimeout(() => {
+                        confetti.style.opacity = '1';
+                        confetti.style.transform = `translate(${Math.random() * 500 - 250}px, ${Math.random() * 500 + 100}px) rotate(${Math.random() * 360}deg)`;
+                        confetti.style.transition = `all ${Math.random() * 3 + 2}s ease-out`;
+                        
+                        // Remove after animation
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 5000);
+                    }, 10);
+                }
+            }
+
+            // Update free spin timer
+            function updateFreeSpinTimer() {
+                const minutes = Math.floor(freeSpinTime / 60);
+                const seconds = freeSpinTime % 60;
+                freeSpinTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (freeSpinTime > 0) {
+                    freeSpinTime--;
+                } else {
+                    // Reset timer
+                    freeSpinTime = 5 * 60;
+                    
+                    // Add free spin credit
+                    balance += 100;
+                    updateBalance();
+                    
+                    // Show notification
+                    const winItem = document.createElement('li');
+                    winItem.className = 'win-item win-highlight';
+                    winItem.innerHTML = `
+                        <span>Free spin credit added!</span>
+                        <span class="win-amount">₹100</span>
+                    `;
+                    winsList.insertBefore(winItem, winsList.firstChild);
+                }
+            }
+
+            // Initialize
+            createWheel();
+            
+            // Add fake wins to history
+            const fakeWins = [1500, 200, 500, 1000, 50, 200, 100, 500];
+            fakeWins.forEach(win => {
+                addWinToHistory(win);
+            });
+
+            // Event listeners
+            spinBtn.addEventListener('click', spinWheel);
+            addFundsBtn.addEventListener('click', showPaymentModal);
+            closePaymentModal.addEventListener('click', hidePaymentModal);
+            confirmPaymentBtn.addEventListener('click', function() {
+                // Add funds
+                balance += 1000;
+                updateBalance();
+                hidePaymentModal();
+                
+                // Show success
+                const winItem = document.createElement('li');
+                winItem.className = 'win-item win-highlight';
+                winItem.innerHTML = `
+                    <span>Deposit successful!</span>
+                    <span class="win-amount">₹1,000</span>
+                `;
+                winsList.insertBefore(winItem, winsList.firstChild);
+            });
+            
+            playAgainBtn.addEventListener('click', function() {
+                hideWinModal();
+                setTimeout(spinWheel, 300);
+            });
+            
+            withdrawBtn.addEventListener('click', function() {
+                hideWinModal();
+                showPaymentModal();
+            });
+
+            // Update timer every second
+            setInterval(updateFreeSpinTimer, 1000);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === paymentModal) {
+                    hidePaymentModal();
+                }
+                if (event.target === winModal) {
+                    hideWinModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
