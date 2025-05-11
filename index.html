@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Spin Wheel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(106, 13, 173, 0.3) 0%, transparent 70%);
+            filter: blur(50px);
+        }
+
+        .glow-effect::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+            filter: blur(60px);
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #f59e0b, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #f59e0b;
+        }
+
+        .balance-amount {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .wheel-container {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        #wheel-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #f59e0b;
+            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.7));
+            z-index: 10;
+        }
+
+        .spin-btn {
+            position: relative;
+            padding: 15px 40px;
+            background: linear-gradient(to bottom, #f59e0b, #b45309);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .spin-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 48%,
+                rgba(255, 255, 255, 0) 52%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            transition: all 0.3s ease;
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
+        }
+
+        .spin-btn:hover::before {
+            left: 100%;
+            top: 100%;
+        }
+
+        .spin-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spin-btn:disabled::before {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom, #1a1a1a, #0a0a0a);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #f59e0b;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            color: #f59e0b;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .payment-method.selected {
+            background: rgba(106, 13, 173, 0.5);
+            border: 1px solid #8b5cf6;
+        }
+
+        .payment-method img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .payment-details {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .payment-amount {
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background: linear-gradient(to right, #8b5cf6, #6d28d9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .confirm-btn:hover {
+            background: linear-gradient(to right, #7c3aed, #5b21b6);
+        }
+
+        .win-modal .modal-content {
+            text-align: center;
+        }
+
+        .win-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            to {
+                transform: translateY(-10px);
+            }
+        }
+
+        .win-message {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .win-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .win-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .win-actions button:first-child {
+            background: linear-gradient(to bottom, #f59e0b, #d97706);
+            color: #000;
+            border: none;
+        }
+
+        .win-actions button:last-child {
+            background: none;
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .win-actions button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 90;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            width: 100%;
+            padding-top: 15px;
+            border-top: 1px solid rgba(245, 158, 11, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .wheel-container {
+                max-width: 300px;
+                height: 300px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .spin-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="glow-effect"></div>
+        
+        <header>
+            <div class="logo">LUXURY SPIN</div>
+            <div class="balance">
+                <span>Balance: <span class="balance-amount">₹0</span></span>
+            </div>
+        </header>
+
+        <main>
+            <div class="wheel-container">
+                <canvas id="wheel-canvas"></canvas>
+                <div class="wheel-arrow"></div>
+            </div>
+
+            <button class="spin-btn" id="spinBtn">SPIN TO WIN</button>
+        </main>
+
+        <footer>
+            © 2023 Luxury Spin | Play responsibly
+        </footer>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closePaymentModal">&times;</button>
+            <div class="modal-title">UNLOCK MORE SPINS</div>
+            <div class="modal-text">
+                Pay ₹99 via UPI to continue playing
+            </div>
+            
+            <div class="payment-method selected">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI">
+                <div>
+                    <div>UPI Payment</div>
+                    <div style="font-size: 0.8rem; color: #aaa;">Instant deposit</div>
+                </div>
+            </div>
+            
+            <div class="payment-details">
+                <div class="payment-row">
+                    <div>Amount:</div>
+                    <div class="payment-amount">₹99</div>
+                </div>
+                <div class="payment-row">
+                    <div>UPI ID:</div>
+                    <div>keanjohn72@oksbi</div>
+                </div>
+            </div>
+            
+            <button class="confirm-btn" id="confirmPayment">I'VE MADE PAYMENT</button>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div class="modal win-modal" id="winModal">
+        <div class="modal-content">
+            <div class="win-emoji">🎉</div>
+            <div class="modal-title">CONGRATULATIONS!</div>
+            <div class="win-message" id="winMessage">You Won!</div>
+            
+            <div class="win-actions">
+                <button id="playAgainBtn">SPIN AGAIN</button>
+                <button id="withdrawBtn">WITHDRAW</button>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="confetti" class="confetti"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const spinBtn = document.getElementById('spinBtn');
+            const paymentModal = document.getElementById('paymentModal');
+            const closePaymentModal = document.getElementById('closePaymentModal');
+            const confirmPaymentBtn = document.getElementById('confirmPayment');
+            const winModal = document.getElementById('winModal');
+            const winMessage = document.getElementById('winMessage');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            const confettiCanvas = document.getElementById('confetti');
+            
+            // State
+            let hasSpun = false;
+            let isSpinning = false;
+            let currentRotation = 0;
+            
+            // Sounds
+            const spinSound = new Howl({
+                src: ['https://assets.codepen.io/3364143/spin-sound.mp3'],
+                volume: 0.5
+            });
+            
+            const winSound = new Howl({
+                src: ['https://assets.codepen.io/3364143/win-sound.mp3'],
+                volume: 0.7
+            });
+            
+            const modalSound = new Howl({
+                src: ['https://assets.codepen.io/3364143/modal-open.mp3'],
+                volume: 0.3
+            });
+            
+            // Three.js Wheel Setup
+            const canvas = document.getElementById('wheel-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            
+            const directionalLight1 = new THREE.DirectionalLight(0xf59e0b, 0.8);
+            directionalLight1.position.set(5, 5, 5);
+            scene.add(directionalLight1);
+            
+            const directionalLight2 = new THREE.DirectionalLight(0x8b5cf6, 0.5);
+            directionalLight2.position.set(-5, -5, -5);
+            scene.add(directionalLight2);
+            
+            // Wheel segments
+            const segments = [
+                { color: 0x8b5cf6, label: 'You Won!' },         // Purple
+                { color: 0xf59e0b, label: 'Date Sophia!' }      // Gold
+            ];
+            
+            // Create wheel
+            const wheelGroup = new THREE.Group();
+            scene.add(wheelGroup);
+            
+            const wheelGeometry = new THREE.CylinderGeometry(3, 3, 0.5, segments.length, 1, true);
+            const wheelMaterial = new THREE.MeshStandardMaterial({
+                color: 0x111827,
+                metalness: 0.7,
+                roughness: 0.3,
+                side: THREE.DoubleSide
+            });
+            
+            const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            wheelGroup.add(wheel);
+            
+            // Add segments
+            const segmentAngle = (2 * Math.PI) / segments.length;
+            
+            segments.forEach((segment, index) => {
+                const angle = index * segmentAngle;
+                const segmentGeometry = new THREE.CylinderGeometry(
+                    3, 3, 0.51, 1, 1, false, angle, segmentAngle
+                );
+                
+                const segmentMaterial = new THREE.MeshStandardMaterial({
+                    color: segment.color,
+                    emissive: segment.color,
+                    emissiveIntensity: 0.2,
+                    metalness: 0.8,
+                    roughness: 0.2,
+                    side: THREE.DoubleSide
+                });
+                
+                const segmentMesh = new THREE.Mesh(segmentGeometry, segmentMaterial);
+                segmentMesh.rotation.z = angle + segmentAngle / 2;
+                wheelGroup.add(segmentMesh);
+            });
+            
+            // Center circle
+            const centerGeometry = new THREE.CircleGeometry(0.5, 32);
+            const centerMaterial = new THREE.MeshStandardMaterial({
+                color: 0xf59e0b,
+                metalness: 0.9,
+                roughness: 0.1
+            });
+            
+            const center = new THREE.Mesh(centerGeometry, centerMaterial);
+            center.position.z = 0.26;
+            wheelGroup.add(center);
+            
+            // Outer ring
+            const ringGeometry = new THREE.RingGeometry(2.9, 3, 64);
+            const ringMaterial = new THREE.MeshStandardMaterial({
+                color: 0xf59e0b,
+                metalness: 0.9,
+                roughness: 0.1,
+                side: THREE.DoubleSide
+            });
+            
+            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            ring.position.z = 0.25;
+            wheelGroup.add(ring);
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                if (!isSpinning) {
+                    wheelGroup.rotation.x += 0.005;
+                    wheelGroup.rotation.y += 0.01;
+                }
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+            
+            // Spin the wheel
+            function spinWheel() {
+                if (isSpinning) return;
+                
+                if (hasSpun) {
+                    paymentModal.classList.add('active');
+                    modalSound.play();
+                    return;
+                }
+                
+                isSpinning = true;
+                spinBtn.disabled = true;
+                spinSound.play();
+                
+                // Random result (50/50 chance)
+                const spinResult = Math.random() > 0.5 ? 'You Won!' : 'Date Sophia!';
+                winMessage.textContent = spinResult;
+                
+                // Calculate rotation (5 full rotations + offset to land on selected section)
+                const targetRotation = 5 * Math.PI * 2 + (Math.PI * 2 - (spinResult === 'You Won!' ? 0 : Math.PI));
+                
+                // Animate the wheel
+                gsap.to(wheelGroup.rotation, {
+                    z: currentRotation + targetRotation,
+                    duration: 4,
+                    ease: "power3.out",
+                    onComplete: () => {
+                        isSpinning = false;
+                        spinBtn.disabled = false;
+                        
+                        // Show win modal
+                        winModal.classList.add('active');
+                        winSound.play();
+                        createConfetti();
+                        
+                        if (!hasSpun) {
+                            hasSpun = true;
+                        }
+                    }
+                });
+                
+                currentRotation += targetRotation;
+            }
+            
+            // Confetti effect
+            function createConfetti() {
+                const confettiCtx = confettiCanvas.getContext('2d');
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+                
+                const particles = [];
+                const colors = ['#f59e0b', '#8b5cf6', '#ec4899', '#10b981', '#3b82f6'];
+                
+                // Create particles
+                for (let i = 0; i < 150; i++) {
+                    particles.push({
+                        x: Math.random() * confettiCanvas.width,
+                        y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+                        size: Math.random() * 10 + 5,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        speed: Math.random() * 3 + 2,
+                        angle: Math.random() * Math.PI * 2,
+                        rotation: Math.random() * 0.2 - 0.1
+                    });
+                }
+                
+                // Animate particles
+                function animateConfetti() {
+                    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                    
+                    let stillActive = false;
+                    
+                    for (let i = 0; i < particles.length; i++) {
+                        const p = particles[i];
+                        
+                        p.y += p.speed;
+                        p.x += Math.sin(p.angle) * 0.5;
+                        p.angle += p.rotation;
+                        
+                        confettiCtx.save();
+                        confettiCtx.translate(p.x, p.y);
+                        confettiCtx.rotate(p.angle);
+                        confettiCtx.fillStyle = p.color;
+                        confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                        confettiCtx.restore();
+                        
+                        if (p.y < confettiCanvas.height) {
+                            stillActive = true;
+                        }
+                    }
+                    
+                    if (stillActive) {
+                        requestAnimationFrame(animateConfetti);
+                    }
+                }
+                
+                animateConfetti();
+            }
+            
+            // Event listeners
+            spinBtn.addEventListener('click', spinWheel);
+            
+            closePaymentModal.addEventListener('click', function() {
+                paymentModal.classList.remove('active');
+                modalSound.play();
+            });
+            
+            confirmPaymentBtn.addEventListener('click', function() {
+                paymentModal.classList.remove('active');
+                modalSound.play();
+            });
+            
+            playAgainBtn.addEventListener('click', function() {
+                winModal.classList.remove('active');
+                setTimeout(spinWheel, 300);
+            });
+            
+            withdrawBtn.addEventListener('click', function() {
+                winModal.classList.remove('active');
+                paymentModal.classList.add('active');
+                modalSound.play();
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === paymentModal) {
+                    paymentModal.classList.remove('active');
+                }
+                if (event.target === winModal) {
+                    winModal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
