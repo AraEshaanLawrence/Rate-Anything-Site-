@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Mystery Box | Instant Rewards</title>
+    <meta name="description" content="Unlock premium mystery boxes with life-changing rewards. Limited availability!">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">LUXURY BOX</div>
+            <div class="countdown">
+                <span id="timer">00:10</span> until next unlock
+            </div>
+        </header>
+
+        <main>
+            <div class="box-container">
+                <div class="box" id="mystery-box">
+                    <div class="box-front">
+                        <div class="glow"></div>
+                        <div class="box-label">?</div>
+                    </div>
+                    <div class="box-back hidden">
+                        <div class="result-content" id="result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-container">
+                <button id="unlock-btn" class="cta-btn pulse">
+                    Tap to Unlock Your Mystery Box – ₹10
+                </button>
+                <div class="stock-counter">
+                    Only <span id="stock">1,243</span> boxes remaining
+                </div>
+            </div>
+
+            <div class="notifications">
+                <div class="notification">
+                    <span class="username">User428</span> just won a ₹100 Flipkart coupon!
+                </div>
+                <div class="notification">
+                    <span class="username">VIP007</span> unlocked the Diamond Drop!
+                </div>
+            </div>
+
+            <div class="leaderboard">
+                <h3>Today's Top Winners</h3>
+                <ol>
+                    <li>AgentX - ₹1,00,000 (Diamond Drop)</li>
+                    <li>LuckyStar - ₹100 Flipkart coupon</li>
+                    <li>MoneyMaker - ₹100 Flipkart coupon</li>
+                    <li>DreamChaser - Premium Thought Codes</li>
+                    <li>FortuneFinder - Premium Thought Codes</li>
+                </ol>
+            </div>
+        </main>
+
+        <footer>
+            <div class="disclaimer">
+                *Results are randomly generated. Prices and availability subject to change.
+            </div>
+        </footer>
+    </div>
+
+    <audio id="unlock-sound" src="assets/sounds/unlock.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="assets/sounds/win.mp3" preload="auto"></audio>
+    <audio id="lose-sound" src="assets/sounds/lose.mp3" preload="auto"></audio>
+
+    <script src="scripts/main.js"></script>
+</body>
+</html>
