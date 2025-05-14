@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 MYSTERY BOX INC. | Win iPhone, Car & ₹1,00,000!</title>
+    <style>
+        /* [All previous CSS remains exactly the same] */
+        /* ... (Include all previous styles) ... */
+        
+        /* New styles for payment fallback */
+        .payment-fallback {
+            display: none;
+            background: rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .payment-fallback-content {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .upi-id {
+            background: rgba(106,0,244,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <!-- [All previous HTML remains exactly the same] -->
+    <!-- ... (Include all previous HTML) ... -->
+    
+    <!-- Payment Fallback Modal -->
+    <div class="payment-fallback" id="payment-fallback">
+        <div class="payment-fallback-content">
+            <h3>Payment Link Didn't Open?</h3>
+            <p>Copy this UPI ID and pay manually:</p>
+            <div class="upi-id" id="upi-id-display">keanjohn72@oksbi</div>
+            <p>Amount: <strong>₹15</strong></p>
+            <button class="copy-btn" id="copy-btn">📋 Copy UPI ID</button>
+            <button class="try-again-btn" id="try-again-btn">🔄 Try Payment Link Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // [Previous JS remains the same until payment function]
+            
+            // New payment variables
+            const paymentAmount = '15'; // Changed from 10 to 15 to avoid GPay errors
+            const paymentFallback = document.getElementById('payment-fallback');
+            const upiIdDisplay = document.getElementById('upi-id-display');
+            const copyBtn = document.getElementById('copy-btn');
+            const tryAgainBtn = document.getElementById('try-again-btn');
+            
+            function initiatePayment() {
+                const upiId = 'keanjohn72@oksbi';
+                const payeeName = 'Mystery Box Inc';
+                const note = 'Mystery Box Unlock';
+                
+                // Universal UPI deep link with all parameters
+                const upiLinks = [
+                    // Primary universal UPI link
+                    `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${paymentAmount}&tn=${encodeURIComponent(note)}&cu=INR`,
+                    
+                    // App-specific deep links as fallbacks
+                    `phonepe://scan/upi?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${paymentAmount}&tn=${encodeURIComponent(note)}`,
+                    `tez://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${paymentAmount}&tn=${encodeURIComponent(note)}`,
+                    `paytmmp://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${paymentAmount}&tn=${encodeURIComponent(note)}`
+                ];
+                
+                // Try all payment links sequentially
+                tryPaymentLinks(upiLinks, 0);
+                
+                // Simulate payment completion (in real app, verify server-side)
+                setTimeout(showResult, 2000);
+            }
+            
+            function tryPaymentLinks(links, index) {
+                if (index >= links.length) {
+                    // All links failed - show fallback
+                    showPaymentFallback();
+                    return;
+                }
+                
+                const link = links[index];
+                window.location.href = link;
+                
+                // Check if the app opened
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        // Try next link
+                        tryPaymentLinks(links, index + 1);
+                    }
+                }, 500);
+            }
+            
+            function showPaymentFallback() {
+                paymentFallback.style.display = 'flex';
+            }
+            
+            function hidePaymentFallback() {
+                paymentFallback.style.display = 'none';
+            }
+            
+            // Copy UPI ID to clipboard
+            copyBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText('keanjohn72@oksbi').then(() => {
+                    copyBtn.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 Copy UPI ID';
+                    }, 2000);
+                });
+            });
+            
+            // Try payment link again
+            tryAgainBtn.addEventListener('click', function() {
+                hidePaymentFallback();
+                initiatePayment();
+            });
+            
+            // [Rest of the JavaScript remains the same]
+        });
+    </script>
+</body>
+</html>
