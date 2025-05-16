@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXURY BOX | Win Instant Rewards</title>
+    <style>
+        /* ... (keep all your existing CSS styles) ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">LUXURY BOX</div>
+            <div class="countdown">
+                <span id="timer">00:10</span> until next unlock
+            </div>
+        </header>
+
+        <main>
+            <div class="box-container">
+                <div class="box" id="mystery-box">
+                    <div class="box-front">
+                        <div class="box-pattern"></div>
+                        <div class="glow"></div>
+                        <div class="box-label">?</div>
+                    </div>
+                    <div class="box-back hidden">
+                        <div class="result-content" id="result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-container">
+                <div class="payment-note">Unlock Price: ₹49 (fixed amount)</div>
+                <button id="unlock-btn" class="cta-btn pulse">
+                    🔓 Pay ₹49 & Unlock Mystery Box
+                </button>
+                <div class="stock-counter">
+                    ⚡ Only <span id="stock">1,243</span> boxes remaining
+                </div>
+            </div>
+
+            <!-- ... (rest of your HTML remains the same) ... -->
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const mysteryBox = document.getElementById('mystery-box');
+            const unlockBtn = document.getElementById('unlock-btn');
+            const timerElement = document.getElementById('timer');
+            const stockElement = document.getElementById('stock');
+            const resultContent = document.getElementById('result-content');
+            
+            // Timer variables
+            let seconds = 10;
+            let timerInterval;
+            
+            // Stock variables
+            let stock = 1243;
+            let stockInterval;
+            
+            // Initialize
+            startTimer();
+            startStockCounter();
+            setupEventListeners();
+            
+            function startTimer() {
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimerDisplay();
+                    
+                    if (seconds <= 0) {
+                        seconds = 10;
+                        simulateWinNotification();
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+                timerElement.textContent = `00:${formattedSeconds}`;
+                
+                if (seconds <= 5) {
+                    timerElement.style.animation = 'pulse 0.5s infinite alternate';
+                    timerElement.style.color = '#ff00aa';
+                } else {
+                    timerElement.style.animation = 'none';
+                    timerElement.style.color = 'var(--secondary)';
+                }
+            }
+            
+            function startStockCounter() {
+                stockInterval = setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        const decreaseAmount = Math.floor(Math.random() * 3) + 1;
+                        stock = Math.max(0, stock - decreaseAmount);
+                        stockElement.textContent = stock;
+                        
+                        if (stock < 100) {
+                            stockElement.style.color = '#ff0000';
+                            stockElement.style.fontWeight = '700';
+                        }
+                    }
+                }, 5000);
+            }
+            
+            function simulateWinNotification() {
+                const notifications = document.querySelectorAll('.notification');
+                const prizes = ['₹100 Flipkart coupon', 'Premium Thought Codes', 'Diamond Drop'];
+                const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+                const randomUser = `User${Math.floor(Math.random() * 900) + 100}`;
+                
+                notifications[1].innerHTML = notifications[0].innerHTML;
+                
+                const icon = randomPrize === 'Diamond Drop' ? '★' : '!';
+                notifications[0].innerHTML = `
+                    <span class="notification-icon">${icon}</span>
+                    <span class="username">${randomUser}</span> won ${randomPrize}!
+                `;
+                
+                if (randomPrize === 'Diamond Drop') {
+                    mysteryBox.classList.add('shake');
+                    setTimeout(() => {
+                        mysteryBox.classList.remove('shake');
+                    }, 500);
+                }
+            }
+            
+            function setupEventListeners() {
+                unlockBtn.addEventListener('click', function() {
+                    // Fixed amount of ₹49
+                    const amount = "49.00"; // Added decimal places for better compatibility
+                    const upiId = 'keanjohn72@oksbi';
+                    const payeeName = 'Kean John';
+                    const note = 'MysteryBoxUnlock';
+                    
+                    // Create multiple UPI payment links for different apps
+                    const upiLinks = [
+                        `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}&cu=INR`, // Generic UPI
+                        `tez://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}&cu=INR`, // Google Pay (old)
+                        `google.pay://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}&cu=INR`, // Google Pay (new)
+                        `phonepe://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}`, // PhonePe
+                        `paytmmp://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}` // PayTM
+                    ];
+                    
+                    // Try to open each UPI app one by one
+                    let success = false;
+                    const tryOpenApp = (index) => {
+                        if (index >= upiLinks.length) return;
+                        
+                        window.location.href = upiLinks[index];
+                        
+                        setTimeout(() => {
+                            if (!document.hidden && !success) {
+                                tryOpenApp(index + 1);
+                            }
+                        }, 300);
+                    };
+                    
+                    // Start with the first link
+                    tryOpenApp(0);
+                    
+                    // Fallback if no UPI app is installed
+                    setTimeout(() => {
+                        if (!document.hidden && !success) {
+                            window.open(`https://upi.link/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&tn=${encodeURIComponent(note)}&cu=INR`, '_blank');
+                        }
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
