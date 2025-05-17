@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 MYSTERY BOX INC. | Win iPhone, Car & ₹1,00,000!</title>
+    <style>
+        :root {
+            --primary: #6a00f4;
+            --primary-dark: #4a00b0;
+            --secondary: #ff00aa;
+            --text: #ffffff;
+            --bg: #0a0a0a;
+            --bg-light: #1a1a1a;
+            --glow: 0 0 20px rgba(106, 0, 244, 0.7);
+            --glow-secondary: 0 0 20px rgba(255, 0, 170, 0.7);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(106, 0, 244, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(106, 0, 244, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(106, 0, 244, 0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(106, 0, 244, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 170, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .countdown {
+            font-size: 14px;
+            background-color: var(--bg-light);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid rgba(106, 0, 244, 0.3);
+        }
+
+        .countdown span {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .box-container {
+            position: relative;
+            margin: 30px auto;
+            width: 250px;
+            height: 250px;
+            perspective: 1000px;
+        }
+
+        .box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .box.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .box.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .box-front, .box-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--glow);
+            overflow: hidden;
+        }
+
+        .box-front {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .box-back {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            transform: rotateY(180deg);
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(106, 0, 244, 0.5);
+        }
+
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, rgba(106, 0, 244, 0.8), transparent 70%);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .box-label {
+            font-size: 80px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .box-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 1px, transparent 2px),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 1px, transparent 2px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 5px 25px rgba(106, 0, 244, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(106, 0, 244, 0.8);
+        }
+
+        .cta-btn:hover::before {
+            opacity: 1;
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 15px rgba(106, 0, 244, 0.5);
+        }
+
+        .cta-btn.pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        .stock-counter {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #aaa;
+            font-weight: 600;
+        }
+
+        .stock-counter span {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .notifications {
+            margin: 40px 0;
+            background-color: var(--bg-light);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(106, 0, 244, 0.2);
+        }
+
+        .notification {
+            padding: 10px 0;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(106, 0, 244, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .notification:last-child {
+            border-bottom: none;
+        }
+
+        .username {
+            color: var(--secondary);
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .notification-icon {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(106, 0, 244, 0.2);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 12px;
+            color: var(--secondary);
+        }
+
+        .leaderboard {
+            background-color: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(106, 0, 244, 0.2);
+        }
+
+        .leaderboard h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .leaderboard h3::before {
+            content: '🔥';
+            margin-right: 8px;
+        }
+
+        .leaderboard ol {
+            padding-left: 20px;
+        }
+
+        .leaderboard li {
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .leaderboard li::before {
+            content: '🎯';
+            margin-right: 8px;
+        }
+
+        .leaderboard li:nth-child(1) {
+            color: gold;
+            font-weight: 700;
+        }
+
+        .leaderboard li:nth-child(2) {
+            color: silver;
+        }
+
+        .leaderboard li:nth-child(3) {
+            color: #cd7f32; /* bronze */
+        }
+
+        .disclaimer {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .result-desc {
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ddd;
+        }
+
+        .result-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        .try-again-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 3px 15px rgba(106, 0, 244, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .try-again-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .try-again-btn:active {
+            transform: translateY(1px);
+        }
+
+        .share-btn {
+            background-color: #1a1a1a;
+            color: white;
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .share-btn:active {
+            transform: translateY(1px);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary);
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .payment-instructions {
+            background-color: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid rgba(106, 0, 244, 0.3);
+        }
+
+        .payment-instructions h3 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .payment-steps {
+            list-style-type: none;
+            margin-bottom: 15px;
+        }
+
+        .payment-steps li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .payment-steps li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .upi-id {
+            background-color: rgba(106, 0, 244, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px dashed var(--secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upi-id:hover {
+            background-color: rgba(106, 0, 244, 0.3);
+        }
+
+        .copy-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .reference-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(106, 0, 244, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .reference-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px rgba(255, 0, 170, 0.5);
+        }
+
+        .submit-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 3px 15px rgba(106, 0, 244, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .share-note {
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .share-note span {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .box-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .box-label {
+                font-size: 70px;
+            }
+            
+            .cta-btn {
+                padding: 16px 25px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">MYSTERY BOX INC.</div>
+            <div class="countdown">
+                <span id="timer">00:10</span> until next unlock
+            </div>
+        </header>
+
+        <main>
+            <div class="box-container">
+                <div class="box" id="mystery-box">
+                    <div class="box-front">
+                        <div class="box-pattern"></div>
+                        <div class="glow"></div>
+                        <div class="box-label">?</div>
+                    </div>
+                    <div class="box-back hidden">
+                        <div class="result-content" id="result-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-instructions">
+                <h3>How to Unlock Your Mystery Box</h3>
+                <ol class="payment-steps">
+                    <li>Copy our UPI ID below</li>
+                    <li>Send ₹49 payment with any UPI app</li>
+                    <li>Enter your payment reference ID below</li>
+                    <li>Your mystery box will unlock instantly!</li>
+                </ol>
+                
+                <div class="upi-id" id="upi-id">8767598378-0@airtel</div>
+                <button class="copy-btn" id="copy-btn">📋 Copy UPI ID</button>
+                
+                <input type="text" class="reference-input" id="reference-input" 
+                       placeholder="Enter your 11-20 digit payment reference ID" 
+                       pattern="\d{11,20}" 
+                       title="Please enter 11 to 20 digits" 
+                       required>
+                
+                <button class="submit-btn" id="submit-btn">🔓 UNLOCK MYSTERY BOX</button>
+                
+                <div class="share-note">
+                    <span>Pro Tip:</span> Sharing with 3 friends increases your winning chance by 80%!
+                </div>
+                
+                <button id="share-btn" class="share-btn">
+                    📤 Share & Increase Your Luck
+                </button>
+            </div>
+
+            <div class="notifications">
+                <div class="notification">
+                    <span class="notification-icon">!</span>
+                    <span class="username">User428</span> won ₹100 Flipkart coupon!
+                </div>
+                <div class="notification">
+                    <span class="notification-icon">★</span>
+                    <span class="username">VIP007</span> unlocked Diamond Drop!
+                </div>
+            </div>
+
+            <div class="leaderboard">
+                <h3>Today's Top Winners</h3>
+                <ol>
+                    <li>AgentX - Won iPhone 15 Pro!</li>
+                    <li>LuckyStar - ₹1,00,000 Cash Prize</li>
+                    <li>MoneyMaker - Rolex Watch</li>
+                    <li>DreamChaser - ₹100 Flipkart Coupon</li>
+                    <li>FortuneFinder - Premium Thought Codes</li>
+                </ol>
+            </div>
+        </main>
+
+        <footer>
+            <div class="disclaimer">
+                *Results are randomly generated. Prices and availability subject to change.<br>
+                This is a simulated experience for entertainment purposes.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const mysteryBox = document.getElementById('mystery-box');
+            const upiIdElement = document.getElementById('upi-id');
+            const copyBtn = document.getElementById('copy-btn');
+            const referenceInput = document.getElementById('reference-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const shareBtn = document.getElementById('share-btn');
+            const timerElement = document.getElementById('timer');
+            const resultContent = document.getElementById('result-content');
+            
+            // Timer variables
+            let seconds = 10;
+            let timerInterval;
+            
+            // Initialize
+            startTimer();
+            setupEventListeners();
+            
+            function startTimer() {
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    updateTimerDisplay();
+                    
+                    if (seconds <= 0) {
+                        seconds = 10;
+                        // Simulate someone winning
+                        simulateWinNotification();
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+                timerElement.textContent = `00:${formattedSeconds}`;
+                
+                // Make timer pulse when under 5 seconds
+                if (seconds <= 5) {
+                    timerElement.style.animation = 'pulse 0.5s infinite alternate';
+                    timerElement.style.color = '#ff00aa';
+                } else {
+                    timerElement.style.animation = 'none';
+                    timerElement.style.color = 'var(--secondary)';
+                }
+            }
+            
+            function simulateWinNotification() {
+                const notifications = document.querySelectorAll('.notification');
+                const prizes = ['₹100 Flipkart coupon', 'iPhone 15 Pro', '₹1,00,000 Cash', 'Rolex Watch', 'Diamond Drop'];
+                const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+                const randomUser = `User${Math.floor(Math.random() * 900) + 100}`;
+                
+                // Shift notifications up
+                notifications[1].innerHTML = notifications[0].innerHTML;
+                
+                // Create new notification with random prize
+                const icon = randomPrize === 'Diamond Drop' ? '★' : '!';
+                notifications[0].innerHTML = `
+                    <span class="notification-icon">${icon}</span>
+                    <span class="username">${randomUser}</span> won ${randomPrize}!
+                `;
+                
+                // Add shake animation to box
+                if (randomPrize === 'Diamond Drop' || randomPrize.includes('Cash') || randomPrize.includes('iPhone')) {
+                    mysteryBox.classList.add('shake');
+                    setTimeout(() => {
+                        mysteryBox.classList.remove('shake');
+                    }, 500);
+                }
+            }
+            
+            function setupEventListeners() {
+                // Copy UPI ID button
+                copyBtn.addEventListener('click', function() {
+                    const upiId = upiIdElement.textContent;
+                    navigator.clipboard.writeText(upiId).then(() => {
+                        copyBtn.textContent = '✅ Copied!';
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋 Copy UPI ID';
+                        }, 2000);
+                    });
+                });
+                
+                // Submit reference ID button
+                submitBtn.addEventListener('click', function() {
+                    const referenceId = referenceInput.value.trim();
+                    
+                    // Validate reference ID (11-20 digits)
+                    if (!/^\d{11,20}$/.test(referenceId)) {
+                        alert('Please enter a valid 11 to 20 digit payment reference ID');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '🔓 UNLOCKING...';
+                    
+                    // Simulate API call delay
+                    setTimeout(() => {
+                        // Show "almost there" message
+                        resultContent.innerHTML = `
+                            <h3 class="result-title">Almost There!</h3>
+                            <p class="result-desc">Better luck next time! Try again for another chance at amazing prizes!</p>
+                            <button class="try-again-btn" id="try-again-btn">TRY AGAIN</button>
+                        `;
+                        
+                        // Flip the box to show result
+                        document.querySelector('.box-front').classList.add('hidden');
+                        document.querySelector('.box-back').classList.remove('hidden');
+                        mysteryBox.classList.add('flipped');
+                        
+                        // Reset submit button
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔓 UNLOCK MYSTERY BOX';
+                        
+                        // Add try again button functionality
+                        document.getElementById('try-again-btn').addEventListener('click', function() {
+                            document.querySelector('.box-front').classList.remove('hidden');
+                            document.querySelector('.box-back').classList.add('hidden');
+                            mysteryBox.classList.remove('flipped');
+                            referenceInput.value = '';
+                        });
+                    }, 1500);
+                });
+                
+                // Allow pressing Enter key to submit
+                referenceInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitBtn.click();
+                    }
+                });
+                
+                // Share button - triggers native share dialog
+                shareBtn.addEventListener('click', function() {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Mystery Box Inc.',
+                            text: 'Unlock amazing prizes like iPhones, cars and cash! Try your luck now!',
+                            url: window.location.href
+                        }).catch(err => {
+                            console.log('Error sharing:', err);
+                        });
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        alert('Web Share API not supported in your browser. Please manually share the page URL.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
